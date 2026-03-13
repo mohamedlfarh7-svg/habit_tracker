@@ -16,33 +16,44 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // $token = $user->createToken('auth_token')->plainTextToken;
 
         return $this->successResponse([
             'user' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            // 'access_token' => $token,
+            // 'token_type' => 'Bearer',
         ], 'Utilisateur enregistré avec succès', 201);
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(Request $request)
     {
+        $request->validate( [
+            'email'    => 'required|email|string',
+            'password' => 'required|string',
+        ]);
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return $this->errorResponse('Identifiants incorrects', 401);
+            return response()->json('not working');
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token');
 
-        return $this->successResponse([
+        // return $this->successResponse([
+        //     'user' => $user,
+        //     'access_token' => $token,
+        //     'token_type' => 'Bearer',
+        //     'status' => 'Connexion réussie'
+        // ]);
+        return response()->json([
             'user' => $user,
             'access_token' => $token,
             'token_type' => 'Bearer',
-        ], 'Connexion réussie');
+            'status' => 'Connexion réussie'
+        ]);
     }
 
 

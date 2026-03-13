@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('habits', function (Schema|Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title', 100);
             $table->text('description')->nullable();
             $table->enum('frequency', ['daily', 'weekly', 'monthly']);

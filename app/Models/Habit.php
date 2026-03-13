@@ -30,4 +30,8 @@ class Habit extends Model
     {
         return $this->hasMany(HabitLog::class);
     }
+    public function getUserid()
+    {
+        return $this->user_id;
+    }
 }
